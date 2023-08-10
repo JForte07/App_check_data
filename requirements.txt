@@ -1,0 +1,4 @@
+unicodedata
+pandas 
+numpy
+streamlit
