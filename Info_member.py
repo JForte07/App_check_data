@@ -1,5 +1,4 @@
 import pandas as pd
-import unicodedata
 
 def unique_email(df_migration_member, df_bo_member):
     # Vérifier si le nombre d'adresses e-mail uniques est le même dans les deux DataFrames
@@ -36,21 +35,17 @@ def matching_info(df_migration_member, df_bo_member):
 
     for i in range(len(merged_df)):
         if pd.notna(merged_df['E-mail address'][i]):
-            def normalize_string(s):
-                if isinstance(s, pd.Timestamp):
-                    return unicodedata.normalize('NFKD', str(s)).casefold()
-                return unicodedata.normalize('NFKD', s).casefold()
             
-            if (not pd.isnull(merged_df['First name'][i]) and not pd.isnull(merged_df['first_name'][i])) and normalize_string(merged_df['first_name'][i]) != normalize_string(merged_df['First name'][i]):
+            if (not pd.isnull(merged_df['First name'][i]) and not pd.isnull(merged_df['first_name'][i])) and merged_df['first_name'][i] != merged_df['First name'][i]:
                 errors.append({'Erreur': 'Wrong First Name', 'email': merged_df['E-mail address'][i] ,'Valeur correcte': merged_df['First name'][i], 'Valeur incorrecte': merged_df['first_name'][i]})
 
-            if (not pd.isnull(merged_df['Last name'][i]) and not pd.isnull(merged_df['last_name'][i])) and normalize_string(merged_df['last_name'][i]) != normalize_string(merged_df['Last name'][i]):
+            if (not pd.isnull(merged_df['Last name'][i]) and not pd.isnull(merged_df['last_name'][i])) and merged_df['last_name'][i] != merged_df['Last name'][i]:
                 errors.append({'Erreur': 'Wrong Last Name', 'email': merged_df['E-mail address'][i] ,'Valeur correcte': merged_df['Last name'][i], 'Valeur incorrecte': merged_df['last_name'][i]})
 
-            if (not pd.isnull(merged_df['gender'][i]) and not pd.isnull(merged_df['Gender'][i])) and normalize_string(merged_df['gender'][i]) != normalize_string(merged_df['Gender'][i]):
+            if (not pd.isnull(merged_df['gender'][i]) and not pd.isnull(merged_df['Gender'][i])) and merged_df['gender'][i] != merged_df['Gender'][i]:
                 errors.append({'Erreur': 'Wrong gender','email': merged_df['E-mail address'][i] , 'Valeur correcte': merged_df['Gender'][i], 'Valeur incorrecte': merged_df['gender'][i]})
             
-            if (not pd.isnull(merged_df['birthday'][i]) and not pd.isnull(merged_df['Date of Birth'][i])) and normalize_string(merged_df['birthday'][i]) != normalize_string(merged_df['Date of Birth'][i]):
+            if (not pd.isnull(merged_df['birthday'][i]) and not pd.isnull(merged_df['Date of Birth'][i])) and merged_df['birthday'][i] != merged_df['Date of Birth'][i]:
                 errors.append({'Erreur': 'Wrong Date of Birth','email': merged_df['E-mail address'][i] , 'Valeur correcte': merged_df['Date of Birth'][i], 'Valeur incorrecte': merged_df['birthday'][i]})
 
 
