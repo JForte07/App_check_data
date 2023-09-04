@@ -75,3 +75,23 @@ def check_info_pass(data_migration_pass, data_bo_pass):
     
     return errors_df
 
+def compare_pass(df_migration_pass,df_bo_pass):
+    nbr_pass_bo,nbr_pass_migration = unique_pass(df_migration_pass,df_bo_pass)
+    error_df = check_info_pass(df_migration_pass, df_bo_pass)
+    if nbr_pass_bo != nbr_pass_migration :
+        st.write('Pas le même nbr de pass, mais plus de pass donc surement ajout')
+        if nbr_pass_migration<nbr_pass_bo :
+            st.write('Il Manque des Pass')
+
+    # Titre de l'application
+    st.title('Récapitulatif des Erreurs des pass')
+
+    if not error_df.empty:
+        st.write(error_df)
+        error_counts = error_df.groupby('E-mail address')['Erreur'].count()
+        st.write("Nombre de membres avec des données de pass faux :", len(error_counts), '/', df_migration_pass['E-mail address'].nunique())
+        st.download_button(label="Télécharger CSV", data=error_df.to_csv(), file_name="Erreur pass.csv")
+    else: 
+        st.write("Nombre de membres avec des données de pass faux :",0, '/', df_migration_pass['E-mail address'].nunique())
+    return 
+

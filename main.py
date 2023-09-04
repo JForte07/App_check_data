@@ -1,13 +1,73 @@
 import streamlit as st
 import pandas as pd
 
+from page_member import *
+from page_passes import *
+from pasge_sub import *
+
 
 from Info_member import *
 from info_pass import *
+from info_subs import *
 
 def main():
+    """
+    
+    Menu principale avec explication 
+    
+    
+    """
     # Titre de l'application
-    st.title('Data Post Migration')
+    st.title('Data migration Sanity Check')
+    
+    """
+    Explication du site 
+    """
+    st.write("Ce site à pour but de vérifier si toutes les informations ont été correctement migrér dans le Backoffice du client. Il vous faudra vous munir du fichier de migrations, ce dernier est récupérable dans django admi ou dans le migration tracker. Il vous faudra également récupérer des informations sur metabase , en fonction de ce que vous souhaitez faire, une indication vous sera donnée pour récupérer facilement les informations")
+    
+
+    """
+    Petite explication pour récupérer le fichier de migration
+    """
+    st.write("Pour récupérer le fichier de migration sur django. Aller dans un premier temps dans data miration")
+    image1 = "App_check_data\Picture\django3.png"  
+    st.image(image1, caption='Django Etape 1 ', use_column_width=True)
+    st.write("Cliquez sur la migration qui vous interesse")
+    image2 = "App_check_data\Picture\Capture d'écran 2023-09-04 124231.png"  
+    st.image(image2, caption='Django Etape 2 ', use_column_width=True)
+    st.write("Puis sur le fichier")
+    image3 = "App_check_data\Picture\django1.png"  
+    st.image(image3, caption='Django Etape 3 ', use_column_width=True)
+
+    st.write("Vous pouvez également le retrouver dans le migration tracker dans certains cas. le fichier migrations s'appelle généralement avec l id de la compagnie avec un _migration à la fin. Ce qui vous permet d'avoir tout les fichier qui ont été utiliser lors de la migration et ainsi comprendre lerreur sil y a")
+    image1 = "App_check_data\Picture\Capture d'écran 2023-09-04 124436.png"  
+    st.image(image1, caption='Migration tracker', use_column_width=True)
+
+
+    """
+    Les différentes pages 
+    """
+    st.write("Choississez ce que vous souhaitez faire : ")
+    # Ajouter un bouton
+    if st.button('Vérifier informations sur les membres'):
+        st.session_state.page = "Page informations membres"
+
+    if st.button('Vérifier informations sur les passes'):
+        st.session_state.page = "Page informations passes"
+
+    if st.button('Vérifier informations sur les sosuscriptions'):
+        st.session_state.page = "Page informations souscription"
+
+# Afficher la page en fonction de la valeur de st.session_state.page
+    if st.session_state.page == "Accueil":
+        main()
+    elif st.session_state.page == "Page informations membres":
+        page_membre()
+    elif st.session_state.page == "Page informations passes":
+        page_pass()
+    elif st.session_state.page == "Page informations souscription":
+        page_sub()
+    
 
     # Chargement du premier fichier Excel
     st.write("Télécharger le fichier Excel de migration:")
@@ -24,61 +84,28 @@ def main():
             df_migration = pd.read_excel(file_1, sheet_name=None)
             df_bo = pd.read_excel(file_2, sheet_name=None)
 
-            #Partie Membre 
-            # Accéder aux DataFrames pour un traitement ultérieur
             df_migration_member = df_migration['Member']
-            df_bo_member = df_bo['Member ']
+            df_bo_member = df_bo['member']
 
-            # Appels aux fonctions définies dans info_member
-            unique_email_result, nbr_diff = unique_email(df_migration_member, df_bo_member)
-            email_missing_result = email_missing(df_migration_member, df_bo_member)
-            
-            # Affichage des résultats dans l'interface utilisateur
-            if unique_email_result == False : 
-                st.write("Nombre de différences d'adresses e-mail :", nbr_diff)
-            if email_missing_result is not None:
-                st.write("Adresses e-mail manquantes :", email_missing_result)
-            else:
-                st.write("Aucune adresse e-mail manquante.")
-
-            error_info_member = matching_info(df_migration_member, df_bo_member)
-            # Afficher le DataFrame des erreurs
-            if error_info_member is not None and not error_info_member.empty:
-                st.title('Récapitulatif des Erreurs sur les infos des membres')
-                st.write(error_info_member)
-                st.write("Nombre d'erreurs par type :")
-                error_counts_member = error_info_member.groupby('email')['Erreur'].count()
-                error_counts = error_info_member.groupby('Erreur').size().reset_index(name='Nombre')
-                for index, row in error_counts.iterrows():
-                    st.write(f"{row['Erreur']}: {row['Nombre']}")
-
-                st.write("Nombre de personnes qui ont de mauvaises informations:", len(error_counts_member), '/', df_migration_member['E-mail address'].nunique())
-                st.download_button(label="Télécharger CSV", data=error_info_member.to_csv(), file_name="Erreur membre.csv")
-            else : 
-                st.write("Nombre de personnes qui ont de mauvaises informations:", 0, '/', df_migration_member['E-mail address'].nunique())
+            compare_info(df_migration_member, df_bo_member)
 
             #Partie Pass 
             df_migration_pass = df_migration['Member']
-            df_bo_pass = df_bo['pass ']
-            nbr_pass_bo,nbr_pass_migration = unique_pass(df_migration_pass,df_bo_pass)
-            error_df = check_info_pass(df_migration_pass, df_bo_pass)
-            if nbr_pass_bo != nbr_pass_migration :
-                st.write('Pas le même nbr de pass, mais plus de pass donc surement ajout')
-                if nbr_pass_migration<nbr_pass_bo :
-                    st.write('Il Manque des Pass')
+            df_bo_pass = df_bo['pass']
+            compare_pass(df_migration_pass,df_bo_pass)
 
-            # Titre de l'application
-            st.title('Récapitulatif des Erreurs des pass')
+            """Partie pour les souscriptions
+            Dans un premier temps regarde si toutes les souscriptions ont été migrés 
+            Ensuite vérifie que les informations sont égales (on s'interressent surtout à la date et aux crédits) 
+            """
+            df_migration_sub = df_migration['Subscriptions']
+            df_bo_sub = df_bo['Sub']
+            compare_sub(df_migration_sub, df_bo_sub)
 
-            if not error_df.empty:
-                st.write(error_df)
-                error_counts = error_df.groupby('E-mail address')['Erreur'].count()
-                st.write("Nombre de membres avec des données de pass faux :", len(error_counts), '/', df_migration_pass['E-mail address'].nunique())
-                st.download_button(label="Télécharger CSV", data=error_df.to_csv(), file_name="Erreur pass.csv")
-            else: 
-                st.write("Nombre de membres avec des données de pass faux :",0, '/', df_migration_pass['E-mail address'].nunique())
         else:
             st.warning("Veuillez télécharger les deux fichiers Excel avant de comparer.")
+
+
 
 if __name__ == "__main__":
     main()
