@@ -1,13 +1,13 @@
 import streamlit as st
-from Info_member import *
+from info_subs import *
 
-def page_membre():
+def page_sub():    
 
     # Titre de la page
-    st.title("Page Informations Membres")
+    st.title("Page Informations sur les Souscriptions")
 
     # Introduction
-    st.write("Sur cette page, nous vérifierons seulement les informations relatives aux membres, en excluant les pass et les souscriptions.")
+    st.write("Sur cette page, nous vérifierons seulement les informations relatives aux membres concernant leurs souscriptions.")
     st.write("Vous avez normalement récupéré votre fichier de migration. Veuillez l'importer ici : ")
 
     # Chargement du premier fichier Excel (Migration)
@@ -17,13 +17,14 @@ def page_membre():
     # Séparation
     st.write("---")
 
-    # Informations sur les choix du Backoffice
-    st.write("Vous avez deux options pour récupérer les informations du Backoffice :")
-    st.write("Option 1 : Si vous choisissez d'importer le rapport directement depuis le Backoffice, vous aurez besoin des informations suivantes : noms, prénoms, e-mails, date d'inscription, date de naissance, genre, adresse, note et tag. Veuillez importer les informations ici :")
-    st.write("Option 2 : Si vous choisissez de récupérer les données depuis Metabase, vous devrez simplement fournir l'ID de la compagnie.")
-
+    
     # Chargement du deuxième fichier Excel (BackOffice)
     st.header("Étape 2 : Importer le fichier Excel du BackOffice")
+    # Informations sur les choix du Backoffice
+    st.write("Vous avez deux options pour récupérer les informations du Backoffice :")
+    st.write("Option 1 : Si vous choisissez d'importer le rapport directement depuis le Backoffice, vous aurez besoin des informations suivantes : e-mails, ID de souscription et date de crédit. Veuillez importer les informations ici :")
+    st.write("Option 2 : Si vous choisissez de récupérer les données depuis Metabase, vous devrez simplement fournir l'ID de la compagnie.")
+
     file_2 = st.file_uploader("Sélectionnez un fichier Excel", type=["xls", "xlsx"], key="file_uploader_2")
 
     # Bouton pour comparer les fichiers
@@ -31,13 +32,13 @@ def page_membre():
         if file_1 is not None and file_2 is not None:
             # Lire les fichiers Excel et créer des DataFrames
             df_migration = pd.read_excel(file_1, sheet_name=None)
-            df_bo_member = pd.read_excel(file_2)
+            df_bo_sub = pd.read_excel(file_2)
 
-            # Partie Membre 
+            # Partie Souscription
             # Accéder aux DataFrames pour un traitement ultérieur
-            df_migration_member = df_migration['Member']
+            df_migration_sub = df_migration['Subscriptions']
 
-            compare_info(df_migration_member, df_bo_member)
+            compare_sub(df_migration_sub, df_bo_sub)
 
     # Bouton pour revenir à la page d'accueil
     if st.button("Revenir à la page d'accueil"):
