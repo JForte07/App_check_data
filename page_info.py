@@ -1,4 +1,5 @@
 import streamlit as st
+from PIL import Image
 
 def page_infos():
     st.title("Comment récupérer le fichier de migration")
@@ -6,8 +7,8 @@ def page_infos():
     st.header("Pour récupérer le fichier de migration sur Django, suivez ces étapes :")
 
     st.markdown("1. Allez d'abord dans le dossier des migrations.")
-    image1 = "https://drive.google.com/file/d/1lY6sO08lexnd1uTwltJH6-diYyGRd3qG/view?usp=drive_link"  
-    st.image(image1, caption='Django Etape 1', use_column_width=True)
+    image = Image.open('Picture\django3.png')
+    st.image(image, caption='Django Etape 1', use_column_width=True)
 
     st.markdown("2. Cliquez sur la migration qui vous intéresse.")
     image2 = "Picture\Capture d'écran 2023-09-04 124231.png"  
