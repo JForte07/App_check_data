@@ -11,15 +11,15 @@ def page_infos():
     st.image(image, caption='Django Etape 1', use_column_width=True)
 
     st.markdown("2. Cliquez sur la migration qui vous intéresse.")
-    image2 = "Picture\Capture d'écran 2023-09-04 124231.png"  
+    image2 = "Picture/Capture d'écran 2023-09-04 124231.png"  
     st.image(image2, caption='Django Etape 2', use_column_width=True)
 
     st.markdown("3. Cliquez sur le fichier correspondant à la migration.")
-    image3 = "Picture\django1.png"  
+    image3 = "Picture/django1.png"  
     st.image(image3, caption='Django Etape 3', use_column_width=True)
 
     st.write("Vous pouvez également le retrouver dans le migration tracker dans certains cas. Le fichier de migrations s'appelle généralement avec l'ID de la compagnie suivi d'un '_migration' à la fin. Cela vous permet d'avoir tous les fichiers qui ont été utilisés lors de la migration et de comprendre les erreurs s'il y en a.")
-    image4 = "Picture\Capture d'écran 2023-09-04 124436.png"  
+    image4 = "Picture/Capture d'écran 2023-09-04 124436.png"  
     st.image(image4, caption='Migration tracker', use_column_width=True)
 
     st.title("Pour récupérer les fichier qui sont sur le BackOficce")
