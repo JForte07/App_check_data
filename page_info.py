@@ -6,7 +6,7 @@ def page_infos():
     st.header("Pour récupérer le fichier de migration sur Django, suivez ces étapes :")
 
     st.markdown("1. Allez d'abord dans le dossier des migrations.")
-    image1 = "Picture\django3.png"  
+    image1 = "App_check_data\Picture\django3.png"  
     st.image(image1, caption='Django Etape 1', use_column_width=True)
 
     st.markdown("2. Cliquez sur la migration qui vous intéresse.")
