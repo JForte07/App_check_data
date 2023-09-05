@@ -3,7 +3,7 @@ import streamlit as st
 def page_infos():
     st.title("Comment récupérer le fichier de migration")
 
-    st.headers("Pour récupérer le fichier de migration sur Django, suivez ces étapes :")
+    st.header("Pour récupérer le fichier de migration sur Django, suivez ces étapes :")
 
     st.markdown("1. Allez d'abord dans le dossier des migrations.")
     image1 = "Picture\django3.png"  
@@ -22,7 +22,7 @@ def page_infos():
     st.image(image4, caption='Migration tracker', use_column_width=True)
 
     st.title("Pour récupérer les fichier qui sont sur le BackOficce")
-    st.headers("Pour récupérer les données sur Métabase, suivez ces étapes :")
+    st.header("Pour récupérer les données sur Métabase, suivez ces étapes :")
     st.markdown("1. Allez dans le dossier OPS puis dans Migration Sanity Check.")
 
     st.markdown("2. Pour les passes récupérer la questions All members Payment packs. N'oubliez pas de changer lid de la compagnie")
